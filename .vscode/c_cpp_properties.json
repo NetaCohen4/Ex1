@@ -2,12 +2,25 @@
     "configurations": [
         {
             "name": "Linux",
-            "includePath": ["${workspaceFolder}/**"],
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/usr/bin/clang",
             "cStandard": "gnu17",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64"
+        },
+        {
+            "name": "iostream",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
         }
     ],
     "version": 4
