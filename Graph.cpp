@@ -6,6 +6,29 @@
 #include <iostream>
 #include "Graph.hpp"
 
+void MyClass::bfs(vector<bool> visited, int start) {
+
+        std::queue<int> queue;
+
+        // Start BFS from the start vertex
+        queue.push(start);
+        visited[start] = true;
+
+        while (!queue.empty()) {
+            int currentVertex = queue.front();
+            queue.pop();
+
+            // Visit all adjacent vertices
+            for (int neighbor : graph[currentVertex]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.push(neighbor);
+                }
+            }
+        }
+
+    }
+/*
 // Constructor
 Graph::Graph(int numVertices, bool directed, bool weighted) : n(numVertices), isDirected(directed), isWeighted(weighted) {
     // Allocate memory for arcs
@@ -57,3 +80,5 @@ void Graph::printGraph() {
     // Implement printing the graph here
     std::cout << "Printing graph...\n";
 }
+
+*/

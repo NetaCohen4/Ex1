@@ -9,52 +9,103 @@
 
 namespace Algorithms {
     
-    bool isConnected(Graph g) { // האלגוריתם מקבל גרף ומחזיר 1 אם הגרף קשיר (אחרת מחזיר 0).
+    
+
+    // Function to check if the graph is connected
+    bool isConnected(Graph g) {
+        int numVertices = g.getSize();
+        if (numVertices < 2) {
+            return true;
+        }
+        std::vector<bool> visited(numVertices, false);
+        g.bfs(visited, 0);
+        // If any vertex remains unvisited, graph is not connected
+        for (bool v : visited) {
+            if (!v) {
+                return false;
+            }
+        }
+        // For directed graph, we should make another bfs
+        visited.assign(numVertices, false);
+        g.bfs(visited, 1);
+        for (bool v : visited) {
+            if (!v) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool shortestPath(Graph g, int start, int end) {
 
     }
-    // Function to check if the graph is connected
-        bool isConnected(Graph g) {
-            if (n <= 1) // A graph with 0 or 1 vertices is considered connected
-                return true;
 
-            // Mark all the vertices as not visited
-            bool *visited = new bool[n];
-            for (int i = 0; i < n; i++)
-                visited[i] = false;
+    bool shortestPath(const vector<vector<int>>& g, int start, int end) {
+        int n = g.size();
+        vector<int> dist(n, numeric_limits<int>::max()); // Initialize distances to infinity
+        dist[start] = 0; // Distance from start to itself is 0
 
-            // Find a vertex with non-zero degree (if any)
-            int v;
-            for (v = 0; v < n; v++) {
-                if (arcs[v][0])
-                    break;
-            }
+        // Priority queue to store vertices and their distances
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        pq.push({0, start}); // Push the start vertex with distance 0
 
-            // If there are no edges in the graph, it's considered connected
-            if (v == n)
-                return true;
+        while (!pq.empty()) {
+            int u = pq.top().second;
+            pq.pop();
 
-            // Start DFS traversal from the first non-zero degree vertex
-            DFSUtil(v, visited);
-
-            // Check if all non-zero degree vertices are visited
-            for (int i = 0; i < n; i++) {
-                if (!arcs[i][0]) // Skip vertices with zero degree
-                    continue;
-                if (visited[i] == false) {
-                    delete[] visited;
-                    return false; // If any non-zero degree vertex is not visited, graph is not connected
+            // Visit all neighbors of u
+            for (int v = 0; v < n; ++v) {
+                if (g[u][v] != 0) { // If there's an edge from u to v
+                    // Relaxation step
+                    if (dist[v] > dist[u] + g[u][v]) {
+                        dist[v] = dist[u] + g[u][v];
+                        pq.push({dist[v], v}); // Add v to priority queue with updated distance
+                    }
                 }
             }
-            delete[] visited;
-            return true; // If all non-zero degree vertices are visited, graph is connected
         }
 
-    bool shortestPath(Graph g, int start, int end) { // האלגוריתם מקבל גרף, קודקוד התחלה וקודקוד סיום ומחזיר את המסלול הקל ביותר (במקרה שהגרף לא ממושקל - הקצר ביותר) בין שני הקודקודים. במידה ואין מסלול כזה, האלגוריתם יחזיר -1.
+        // If the distance to the end vertex is still infinity, there's no path
+        if (dist[end] == numeric_limits<int>::max()) {
+            cout << "No path from " << start << " to " << end << " exists." << endl;
+            return false;
+        }
 
+        cout << "Shortest distance from " << start << " to " << end << ": " << dist[end] << endl;
+        return true;
     }
 
     bool isContainsCycle(Graph g) { // האלגוריתם מקבל גרף ומדפיס מעגל כלשהו. אם לא קיים מעגל בגרף, האלגוריתם יחזיר 0.
 
+    }
+
+    bool isCycleUtil(int node, vector<vector<int>>& graph, vector<bool>& visited, int parent) {
+        visited[node] = true;
+
+        for (int neighbor : graph[node]) {
+            if (!visited[neighbor]) {
+                if (isCycleUtil(neighbor, graph, visited, node))
+                    return true;
+            } else if (neighbor != parent) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool isContainsCycle(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<bool> visited(n, false);
+
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                if (isCycleUtil(i, graph, visited, -1))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     bool isBipartite(Graph g) { // האלגוריתם מקבל גרף ומחזיר את החלוקה של הגרף לגרף דו-צדדי. אם אי אפשר לחלק את הגרף, האלגוריתם יחזיר 0.

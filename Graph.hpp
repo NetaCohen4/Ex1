@@ -4,27 +4,41 @@
     System programming Exercise 1
 */
 
+#ifndef GRAPH_HPP
+#define GRAPH_HPP
+
+#include <iostream>
+#include <vector>
+using namespace std;
 
 class Graph {
 private:
-    int n; // n is number of vertices in the graph
-    bool **arcs; // n*n
-    int **e_weight; // in use only if the graph is weighted
-    bool isDirected;
-    bool isWeighted;
+
+    vector<vector<int>> graph;
+
 
 public:
     // Constructor
-    Graph(int numVertices, bool directed = false, bool weighted = false);
+    Graph(){}
 
     // Destructor
-    ~Graph();
+    ~Graph(){}
 
-    int get_n();
+    int getSize() {return graph.size();}
 
     // Function to load graph data from file
-    void loadGraph();
+    void loadGraph(std::vector<std::vector<int>> data) {graph = data;}
 
     // Function to print the graph
-    void printGraph();
+    void printGraph(){
+        for (size_t i = 0; i < graph.size(); ++i) {
+            std::cout << "Vertex " << i << " is connected to: ";
+            for (int v : graph[i]) {
+                std::cout << v << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
 };
+
+#endif // GRAPH_HPP

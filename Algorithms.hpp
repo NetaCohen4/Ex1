@@ -23,7 +23,7 @@ namespace Algorithms {
 
     bool negativeCycle(Graph g); // האלגוריתם מקבל גרף ומוצא מעגל שלילי (כלומר מעגל שסכום המשקלים של הצלעות שלילי). אם לא קיים מעגל כזה, האלגוריתם ידפיס שלא קיים מעגל שלילי.
 
-
+    void bfs(Graph g, vector<bool> visited, int start);
 }
 
 #endif
